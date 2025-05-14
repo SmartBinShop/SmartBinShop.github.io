@@ -1,0 +1,10 @@
+RewriteEngine on
+
+# Reindirizza richieste a .html verso la versione senza estensione
+RewriteCond %{THE_REQUEST} \s/([^\s]+)\.html[\s?] [NC]
+RewriteRule ^(.+)\.html$ /$1 [R=301,L]
+
+# Riscrive URL senza estensione per servire il file .html
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.+)$ $1.html [NC,L]

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contatti | SmartBin</title>
+    <link rel="shortcut icon" href="../img/cestino.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" />
+    <link rel="stylesheet" href="../css/var.css" />
+    <link rel="stylesheet" href="../css/typer.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/content.css">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-bar">
+
+            <a href="../index.html" class="logo navLogo">
+                <img src="../img/cestino.png">
+                <span>Smart</span><span>Bin</span>
+            </a>
+
+            <div class="menu">
+                <div class="logo-toggle">
+                    <span class="logo"><a href="../index">SmartBin</a></span>
+                    <i class="bx bx-x sidebarClose"></i>
+                </div>
+
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="./products.html">Prodotti</a></li>
+                    <li><a href="./info.html">Info</a></li>
+                    <li><a href="./contact.html" class="active">Contatti</a></li>
+                </ul>
+            </div>
+
+            <div class="darkLight-searchBox">
+                <i class="bx bx-menu sidebarOpen"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <h1 id="typed-text"><span class="typer">Contatti</span></h1>
+        </div>
+
+        <div class="content">
+            <section>
+                <article>
+                    <h5>Social</h5>
+                    <div class="article norm-txt-dk">
+                        <div class="social-links">
+                            <a href="https://instagram.com/smartbin_shop" aria-label="Instagram" target="_blank"><i
+                                    class='bx bxl-instagram'></i> @smartbin_shop</a>
+                            <a href="https://youtube.com/@SmartBin-Shop" aria-label="YouTube" target="_blank"><i
+                                    class='bx bxl-youtube'></i> @SmartBin-Shop</a>
+                            <a href="https://x.com/SmartBin_Shop" aria-label="Twitter/X" target="_blank"><i
+                                    class='bx bxl-twitter'></i> @SmartBin_Shop</a>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <section>
+                <article>
+                    <h5>Scrivici</h5>
+                    <div class="article norm-txt-dk">
+                        <div class="">
+                            <form id="emailForm">
+
+                                <label for="message">Inserire messaggio:</label><br>
+                                <textarea id="message" name="message" rows="5" required></textarea>
+
+                                <button type="submit">Invia</button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <script>
+                document.getElementById("emailForm").addEventListener("submit", function (event) {
+                    event.preventDefault();
+
+                    const userEmail = document.getElementById("userEmail").value;
+                    const message = document.getElementById("message").value;
+
+                    const mailtoLink = `mailto:smartbin.help@gmail.com?&body=${encodeURIComponent(message)}`;
+                    window.location.href = mailtoLink;
+                });
+            </script>
+
+        </div>
+    </main>
+
+    <footer>
+        <!-- <div class="social-links">
+            <a href="https://instagram.com/smartbin_shop" aria-label="Instagram" target="_blank"><i class='bx bxl-instagram'></i> @smartbin_shop</a>
+            <a href="https://youtube.com/@SmartBin-Shop" aria-label="YouTube" target="_blank"><i class='bx bxl-youtube'></i> @SmartBin-Shop</a>
+            <a href="https://x.com/SmartBin_Shop" aria-label="Twitter/X" target="_blank"><i class='bx bxl-twitter'></i> @SmartBin_Shop</a>
+            <a href="mailto:smartbin.help@gmail.com" aria-label="Gmail" target="_blank"><i class='bx bx-envelope'></i> smartbin.help@gmail.com</a>
+        </div> -->
+
+        <p>
+            Copyright &copy; 2025
+            <span class="brand-white">Smart</span><span class="brand-yellow"">Bin</span>
+            - All rights reserved.
+        </p>
+    </footer>
+
+</body>
+
+</html>
