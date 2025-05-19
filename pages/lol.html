@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Arduino Grid Popup</title>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            overflow-x: hidden;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 200px);
+            gap: 15px;
+            padding: 40px;
+            justify-content: center;
+        }
+
+        .grid img {
+            width: 200px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(6px);
+            z-index: 100;
+            display: none;
+        }
+
+        .overlay.visible {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .highlight-img {
+            position: fixed;
+            z-index: 101;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            border-radius: 8px;
+        }
+
+        .popup {
+            position: fixed;
+            width: 33vw;
+            max-width: 450px;
+            height: auto;
+            max-height: 80vh;
+            overflow-y: auto;
+            background: #1e1e1e;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+            z-index: 102;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+
+        .popup.visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        .popup::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            z-index: 1;
+        }
+
+        .popup.right::after {
+            left: -20px;
+            top: 20px;
+            border-right-color: #1e1e1e;
+        }
+
+        .popup.left::after {
+            right: -20px;
+            top: 20px;
+            border-left-color: #1e1e1e;
+        }
+
+        .close-btn {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            float: right;
+        }
+
+        pre {
+            background: #0d1117;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="grid" id="grid">
+        <!-- 9 immagini -->
+        <img src="https://picsum.photos/id/101/200/150" data-index="0">
+        <img src="https://picsum.photos/id/102/200/150" data-index="1">
+        <img src="https://picsum.photos/id/103/200/150" data-index="2">
+        <img src="https://picsum.photos/id/104/200/150" data-index="3">
+        <img src="https://picsum.photos/id/104/200/150" data-index="4">
+        <img src="https://picsum.photos/id/106/200/150" data-index="5">
+        <img src="https://picsum.photos/id/107/200/150" data-index="6">
+        <img src="https://picsum.photos/id/108/200/150" data-index="7">
+        <img src="https://picsum.photos/id/109/200/150" data-index="8">
+    </div>
+
+    <!-- Overlay blur -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Copia immagine -->
+    <img class="highlight-img" id="highlightImg" style="display: none;" />
+
+    <!-- Popup -->
+    <div class="popup" id="popup">
+        <button class="close-btn" onclick="closePopup()">Chiudi</button>
+        <pre><code class="language-c" id="popupCode"></code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script>
+        const explanations = [
+            `void setup() {\n  pinMode(13, OUTPUT);\n}\nvoid loop() {\n  digitalWrite(13, HIGH);\n  delay(1000);\n  digitalWrite(13, LOW);\n  delay(1000);\n}`,
+            `int led = 9;\nvoid setup() {\n  pinMode(led, OUTPUT);\n}\nvoid loop() {\n  analogWrite(led, 128);\n}`,
+            `const int button = 2;\nvoid setup() {\n  pinMode(button, INPUT);\n  Serial.begin(9600);\n}\nvoid loop() {\n  if (digitalRead(button)) {\n    Serial.println("Premuto");\n  }\n}`,
+            `// Codice 4`,
+            `// Codice 5`,
+            `// Codice 6`,
+            `// Codice 7`,
+            `// Codice 8`,
+            `// Codice 9`
+        ];
+
+        const grid = document.getElementById('grid');
+        const overlay = document.getElementById('overlay');
+        const highlightImg = document.getElementById('highlightImg');
+        const popup = document.getElementById('popup');
+        const popupCode = document.getElementById('popupCode');
+
+        grid.querySelectorAll('img').forEach(img => {
+            img.addEventListener('click', () => {
+                const rect = img.getBoundingClientRect();
+                const index = parseInt(img.dataset.index);
+
+                // Mostra overlay
+                overlay.classList.add('visible');
+
+                // Mostra immagine evidenziata
+                highlightImg.src = img.src;
+                highlightImg.style.display = 'block';
+                highlightImg.style.top = rect.top + 'px';
+                highlightImg.style.left = rect.left + 'px';
+                highlightImg.style.width = rect.width + 'px';
+                highlightImg.style.height = rect.height + 'px';
+
+                // Mostra popup
+                popupCode.textContent = explanations[index];
+                hljs.highlightElement(popupCode);
+
+                // Posizione popup
+                const popupSide = (window.innerWidth - rect.right > 400) ? 'right' : 'left';
+                popup.classList.remove('right', 'left');
+                popup.classList.add(popupSide);
+
+                popup.style.top = `${rect.top}px`;
+                popup.style.left = popupSide === 'right'
+                    ? `${rect.right + 20}px`
+                    : `${rect.left - 450}px`;
+
+                popup.classList.add('visible');
+            });
+        });
+
+        function closePopup() {
+            overlay.classList.remove('visible');
+            popup.classList.remove('visible');
+            highlightImg.style.display = 'none';
+        }
+
+        // Chiudi se clicchi fuori
+        overlay.addEventListener('click', closePopup);
+    </script>
+
+</body>
+
+</html>

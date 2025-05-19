@@ -5,35 +5,39 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Info | SmartBin</title>
-    <link rel="shortcut icon" href="../img/cestino.png" type="image/x-icon">
+    <link rel="shortcut icon" href="/img/cestino.png" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" />
-    <link rel="stylesheet" href="../css/var.css" />
-    <link rel="stylesheet" href="../css/style.css" />
-    <link rel="stylesheet" href="../css/typer.css" />
-    <link rel="stylesheet" href="../css/navbar.css" />
-    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="/css/var.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/comp.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
 </head>
 
 <body>
     <nav>
         <div class="nav-bar">
 
-            <a href="../index.html" class="logo navLogo">
-                <img src="../img/cestino.png">
+            <a href="/index.html" class="logo navLogo">
+                <img src="/img/cestino.png">
                 <span>Smart</span><span>Bin</span>
             </a>
 
             <div class="menu">
                 <div class="logo-toggle">
-                    <span class="logo"><a href="../index">SmartBin</a></span>
+                    <span class="logo"><a href="/index">SmartBin</a></span>
                     <i class="bx bx-x sidebarClose"></i>
                 </div>
 
                 <ul class="nav-links">
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="./products.html">Prodotti</a></li>
-                    <li><a href="./info.html" class="active">Info</a></li>
-                    <li><a href="./contact.html">Contatti</a></li>
+                    <li><a href="/index.html">Home</a></li>
+                    <li><a href="/pages/products.html">Prodotti</a></li>
+                    <li><a href="/page/info.html" class="active">Info</a></li>
+                    <li><a href="/pages/contact.html">Contatti</a></li>
                 </ul>
             </div>
 
@@ -45,18 +49,359 @@
 
     <main>
         <div class="container">
-            <h1 id="typed-text"><span class="typer">Info</span></h1>
+            <h1>Info</h1>
+            <h3>1 Prodotto Disponibile</h3>
         </div>
+
+        <div class="grid" id="grid">
+            <img src="/img/1-cestino.png" data-index="0">
+            <img src="https://picsum.photos/id/102/200/150" data-index="1">
+            <img src="https://picsum.photos/id/103/200/150" data-index="2">
+            <img src="https://picsum.photos/id/104/200/150" data-index="3">
+            <img src="https://picsum.photos/id/104/200/150" data-index="4">
+            <img src="https://picsum.photos/id/106/200/150" data-index="5">
+            <img src="https://picsum.photos/id/107/200/150" data-index="6">
+            <img src="https://picsum.photos/id/108/200/150" data-index="7">
+            <img src="https://picsum.photos/id/109/200/150" data-index="8">
+        </div>
+        <div class="overlay" id="overlay"></div>
+
+        <img class="highlight-img" id="highlightImg" style="display: none;" />
+        <div class="popup" id="popup">
+            <button class="close-btn" onclick="closePopup()">Chiudi</button>
+            <pre><code class="language-c" id="popupCode"></code></pre>
+        </div>
+
+
+        <script>
+            const explanations = [
+                `// Elegoo UNO R3
+
+#include <LiquidCrystal.h>
+#include <Servo.h>
+
+Servo servo;
+LiquidCrystal lcd_1(12, 11, 10, 9, 8, 7);
+
+const int pinServo = 6;
+const int pinLedRed = A0;
+const int pinLedGreen = A1;
+const int pinLedBlue = A2;
+const int pinBuzzer = 13;
+const int pinTrig = 3;
+const int pinEcho = 2;
+
+const int minDistance = 10;
+const int PosOpen = 90;
+const int PosClose = 0;
+
+long duration;
+float distance;
+int aperture = 0;
+
+bool isOpen = false;
+bool isBuzzer = true;
+bool isRifai = true;
+
+void setup() {
+
+    servo.attach(pinServo, 500, 2500);
+    servo.write(PosClose);
+
+    pinMode(pinLedRed, OUTPUT);
+    pinMode(pinLedGreen, OUTPUT);
+
+    pinMode(pinTrig, OUTPUT);
+    pinMode(pinEcho, INPUT);
+
+    lcd_1.begin(16, 2);
+}
+
+void loop() {
+
+    digitalWrite(pinTrig, 0);
+    delayMicroseconds(2);
+
+    digitalWrite(pinTrig, 1);
+    delayMicroseconds(10);
+
+    digitalWrite(pinTrig, 0);
+
+    duration = pulseIn(pinEcho, 1);
+    distance = duration / 58.31;
+
+    if (distance > 0 && distance < minDistance && isRifai) {
+
+        isOpen = !isOpen;
+        isRifai = false;
+
+        if (isOpen) {
+
+            servo.write(PosOpen);
+
+            analogWrite(pinLedRed, 0);
+            analogWrite(pinLedGreen, 255);
+
+            aperture++;
+
+            if (isBuzzer) {
+                tone(pinBuzzer, 800, 200);
+                isBuzzer = false;
+            }
+
+            lcd_1.setCursor(0, 0);
+            lcd_1.print("Indifferenziato ");
+            lcd_1.setCursor(0, 1);
+            lcd_1.print("Aperturte: ");
+            lcd_1.print(aperture);
+            lcd_1.print("    ");
+
+        } else {
+
+            servo.write(PosClose);
+            analogWrite(pinLedRed, 255);
+            analogWrite(pinLedGreen, 0);
+
+            if (!isBuzzer) {
+
+                tone(pinBuzzer, 400, 200);
+                isBuzzer = true;
+            }
+
+            lcd_1.setCursor(0, 1);
+            lcd_1.print("Chiuso          ");
+        }
+    }
+
+    if (distance >= minDistance) {
+
+        isRifai = true;
+    }
+
+    delay(200);
+}`,
+                `// Schermo LCD
+
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd_1(12, 11, 10, 9, 8, 7);
+
+int contatore = 0;
+
+void setup() {
+    lcd_1.begin(16, 2);
+}
+
+void loop() {
+    lcd_1.setCursor(0, 0);
+    lcd_1.print("Contatore di");
+    lcd_1.setCursor(0, 1);
+    lcd_1.print("secondi: ");
+    lcd_1.print(contatore);
+    lcd_1.print("    ");
+    contatore++;
+    delay(1000);
+}`,
+                `// Servo motore (SG90)
+
+#include <Servo.h>
+
+Servo servo;
+
+const int pinServo = 6;
+
+const int PosOpen = 90;
+const int PosClose = 0;
+
+void setup() {
+    servo.attach(pinServo, 500, 2500);
+    servo.write(PosClose);
+}
+
+void loop() {
+    servo.write(PosOpen);
+    delay(1000);
+
+    servo.write(PosClose);
+    delay(1000);
+}`,
+                `// Sensore a ultrasuoni (HC-SR04)
+
+const int trigPin = 3;
+const int echoPin = 2;
+const int ledPin = 13;
+
+const int minDistance = 50;
+
+long duration;
+float distance;
+
+void setup() {
+    pinMode(trigPin, OUTPUT);
+    pinMode(echoPin, INPUT);
+    pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+    digitalWrite(trigPin, 0);
+    delayMicroseconds(2);
+
+    digitalWrite(trigPin, 1);
+    delayMicroseconds(10);
+
+    digitalWrite(trigPin, 0);
+
+    duration = pulseIn(echoPin, 1);
+    distance = duration / 58.31;
+
+    if(distance < minDistance) {
+        digitalWrite(ledPin, 1);
+    } else {
+        digitalWrite(ledPin, 0);
+    }
+
+    delay(500);
+}`,
+                `// LED
+
+const int redLedPin = A0;
+const int greenLedPin = A1;
+const int blueLedPin = A2;
+
+void setup() {
+    pinMode(redLedPin, OUTPUT);
+    pinMode(greenLedPin, OUTPUT);
+    pinMode(blueLedPin, OUTPUT);
+}
+
+void loop() {
+    analogWrite(redLedPin, 255);
+    delay(500);
+
+    analogWrite(redLedPin, 0);
+    delay(500);
+
+    analogWrite(greenLedPin, 255);
+    delay(500);
+
+    analogWrite(greenLedPin, 0);
+    delay(500);
+
+    analogWrite(blueLedPin, 255);
+    delay(500);
+
+    analogWrite(blueLedPin, 0);
+    delay(500);
+}`,
+                `// Buzzer
+
+const int pinBuzzer = 13;
+
+void setup() {
+    pinMode(pinBuzzer, OUTPUT);
+}
+
+void loop() {
+    tone(pinBuzzer, 800, 200);
+    delay(1000);
+
+    tone(pinBuzzer, 400, 200);
+    delay(1000);
+}`,
+                `// Codice 7`,
+                `// Codice 8`,
+                `// Codice 9`,
+            ];
+
+            const grid = document.getElementById('grid');
+            const overlay = document.getElementById('overlay');
+            const highlightImg = document.getElementById('highlightImg');
+            const popup = document.getElementById('popup');
+            const popupCode = document.getElementById('popupCode');
+            const body = document.body;
+            grid.querySelectorAll('img').forEach(img => {
+                img.addEventListener('click', () => {
+
+                    body.style.scrollbarGutter = 'stable';
+
+                    body.style.overflow = 'hidden';
+
+
+                    window.scrollTo({
+                        top: 0,
+                    });
+
+
+                    const rect = img.getBoundingClientRect();
+                    const index = parseInt(img.dataset.index);
+
+                    // Mostra overlay
+                    overlay.classList.add('visible');
+
+                    // Mostra immagine evidenziata
+                    highlightImg.src = img.src;
+                    highlightImg.style.display = 'block';
+                    highlightImg.style.top = rect.top + 'px';
+                    highlightImg.style.left = rect.left + 'px';
+                    highlightImg.style.width = rect.width + 'px';
+                    highlightImg.style.maxHeight = rect.height + 'px';
+                    highlightImg.style.objectFit = 'contain';
+                    highlightImg.style.borderRadius = '8px';
+
+                    // Mostra popup
+                    popupCode.textContent = explanations[index];
+                    hljs.highlightElement(popupCode);
+
+                    // Posizione popup
+                    const popupSide = (window.innerWidth - rect.right > 400) ? 'right' : 'left';
+                    popup.classList.remove('right', 'left');
+                    popup.classList.add(popupSide);
+
+                    const isBottomRow = index >= 6; // immagini 7, 8, 9
+                    const popupHeight = 450; // altezza stimata del popup (adatta se diversa)
+
+                    // Posizione popup (top o bottom)
+                    if (isBottomRow) {
+                        popup.style.top = `${Math.min(rect.bottom - popupHeight, window.innerHeight - popupHeight - 20)}px`;
+                    } else {
+                        popup.style.top = `${rect.top}px`;
+                    }
+
+                    popup.style.left = popupSide === 'right'
+                        ? `${rect.right + 20}px`
+                        : `${rect.left - 450}px`;
+
+                    popup.classList.add('visible');
+
+                });
+            });
+
+            function closePopup() {
+                body.style.paddingRight = '';
+                overlay.classList.remove('visible');
+                popup.classList.remove('visible');
+                highlightImg.style.display = 'none';
+                body.style.overflow = 'auto';
+                document.getElementById('popupCode').innerHTML = '';
+                document.getElementById('popupCode').removeAttribute('data-highlighted');
+            }
+
+            overlay.addEventListener('click', closePopup);
+        </script>
     </main>
 
     <footer>
         <div class="social-links">
-            <a href="https://instagram.com/smartbin_shop" aria-label="Instagram" target="_blank"><i class='bx bxl-instagram'></i> @smartbin_shop</a>
-            <a href="https://youtube.com/@SmartBin-Shop" aria-label="YouTube" target="_blank"><i class='bx bxl-youtube'></i> @SmartBin-Shop</a>
-            <a href="https://x.com/SmartBin_Shop" aria-label="Twitter/X" target="_blank"><i class='bx bxl-twitter'></i> @SmartBin_Shop</a>
-            <a href="mailto:smartbin.help@gmail.com" aria-label="Gmail" target="_blank"><i class='bx bx-envelope'></i> smartbin.help@gmail.com</a>
+            <a href="https://instagram.com/smartbin_shop" aria-label="Instagram" target="_blank"><i
+                    class='bx bxl-instagram'></i> @smartbin_shop</a>
+            <a href="https://youtube.com/@SmartBin-Shop" aria-label="YouTube" target="_blank"><i
+                    class='bx bxl-youtube'></i> @SmartBin-Shop</a>
+            <a href="https://x.com/SmartBin_Shop" aria-label="Twitter/X" target="_blank"><i class='bx bxl-twitter'></i>
+                @SmartBin_Shop</a>
+            <a href="mailto:smartbin.help@gmail.com" aria-label="Gmail" target="_blank"><i class='bx bx-envelope'></i>
+                smartbin.help@gmail.com</a>
         </div>
-        
+
         <p>
             Copyright &copy; 2025
             <span class="brand-white">Smart</span><span class="brand-yellow"">Bin</span>
