@@ -50,19 +50,19 @@
     <main>
         <div class="container">
             <h1>Info</h1>
-            <h3>1 Prodotto Disponibile</h3>
+            <!-- <h3>1 Prodotto Disponibile</h3> -->
         </div>
 
         <div class="grid" id="grid">
-            <img src="/img/1-cestino.png" data-index="0">
-            <img src="https://picsum.photos/id/102/200/150" data-index="1">
-            <img src="https://picsum.photos/id/103/200/150" data-index="2">
-            <img src="https://picsum.photos/id/104/200/150" data-index="3">
-            <img src="https://picsum.photos/id/104/200/150" data-index="4">
-            <img src="https://picsum.photos/id/106/200/150" data-index="5">
-            <img src="https://picsum.photos/id/107/200/150" data-index="6">
-            <img src="https://picsum.photos/id/108/200/150" data-index="7">
-            <img src="https://picsum.photos/id/109/200/150" data-index="8">
+            <img src="/img/arduino.png" data-index="0">
+            <img src="/img/lcd.png" data-index="1">
+            <img src="/img/sg90.png" data-index="2">
+            <img src="/img/hc-sr04.png" data-index="3">
+            <img src="/img/led.png" data-index="4">
+            <img src="/img/buzzer.png" data-index="5">
+            <img src="/img/jumper.PNG" data-index="6">
+            <img src="/img/breadboard.png" data-index="7">
+            <img src="/img/resistenza.png" data-index="8">
         </div>
         <div class="overlay" id="overlay"></div>
 
@@ -262,7 +262,7 @@ void loop() {
 
     delay(500);
 }`,
-                `// LED
+                `// LED RGB
 
 const int redLedPin = A0;
 const int greenLedPin = A1;
@@ -328,7 +328,7 @@ void loop() {
 
 
                     window.scrollTo({
-                        top: 0,
+                        top: 50,
                     });
 
 
@@ -344,16 +344,18 @@ void loop() {
                     highlightImg.style.top = rect.top + 'px';
                     highlightImg.style.left = rect.left + 'px';
                     highlightImg.style.width = rect.width + 'px';
-                    highlightImg.style.maxHeight = rect.height + 'px';
+                    highlightImg.style.height = rect.height + 'px';
                     highlightImg.style.objectFit = 'contain';
-                    highlightImg.style.borderRadius = '8px';
+                    highlightImg.style.backgroundColor = '#272727';
+                    highlightImg.style.borderRadius = '1rem';
+                    highlightImg.style.padding = '20px';
 
                     // Mostra popup
                     popupCode.textContent = explanations[index];
                     hljs.highlightElement(popupCode);
 
                     // Posizione popup
-                    const popupSide = (window.innerWidth - rect.right > 400) ? 'right' : 'left';
+                    const popupSide = (window.innerWidth - rect.right > 500) ? 'right' : 'left';
                     popup.classList.remove('right', 'left');
                     popup.classList.add(popupSide);
 
