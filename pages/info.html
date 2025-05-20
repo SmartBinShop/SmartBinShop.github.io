@@ -68,12 +68,26 @@
 
         <img class="highlight-img" id="highlightImg" style="display: none;" />
         <div class="popup" id="popup">
+            <h1 id="title"></h1>
+            <p id="desc"></p>
             <button class="close-btn" onclick="closePopup()">Chiudi</button>
-            <pre><code class="language-c" id="popupCode"></code></pre>
+            <pre id="code"><code class="language-c" id="popupCode"></code></pre>
         </div>
 
 
         <script>
+            const descrizioni = [
+                'arduino uno r3 è un microcontrollore open-source basato su ATmega328P. È dotato di 14 pin digitali, 6 pin analogici e una porta USB per la programmazione.',
+                'Lo schermo LCD è un display a cristalli liquidi che consente di visualizzare informazioni in modo chiaro e leggibile. È utile per mostrare messaggi e dati in tempo reale.',
+                'Il servo motore SG90 è un servomotore compatto e leggero, ideale per applicazioni di robotica e automazione. Ha una rotazione di 180 gradi e una coppia di 2.5 kg/cm.',
+                'Il sensore a ultrasuoni HC-SR04 misura la distanza utilizzando onde sonore. È ampiamente utilizzato in progetti di robotica e automazione per rilevare ostacoli e misurare distanze.',
+                'Il LED RGB è un diodo emettitore di luce che può emettere luce di diversi colori. È composto da tre LED (rosso, verde e blu) che possono essere combinati per creare una vasta gamma di colori.',
+                'Il buzzer è un dispositivo acustico che produce suoni. Può essere utilizzato per segnalazioni sonore, avvisi e allarmi in vari progetti elettronici.',
+                'I cavi jumper sono fili elettrici utilizzati per collegare componenti elettronici su una breadboard o tra circuiti. Sono disponibili in diverse lunghezze e colori.',
+                'La breadboard è una piastra di prototipazione senza saldatura che consente di assemblare circuiti elettronici in modo semplice e veloce. È dotata di fori per inserire i componenti e collegarli tra loro.',
+                'La resistenza è un componente elettronico che limita il flusso di corrente in un circuito. Viene utilizzata per proteggere i componenti e regolare le tensioni nei circuiti elettronici.'
+
+            ]
             const explanations = [
                 `// Elegoo UNO R3
 
@@ -317,6 +331,8 @@ void loop() {
             const overlay = document.getElementById('overlay');
             const highlightImg = document.getElementById('highlightImg');
             const popup = document.getElementById('popup');
+            const title = document.getElementById('title');
+            const desc = document.getElementById('desc');
             const popupCode = document.getElementById('popupCode');
             const body = document.body;
             grid.querySelectorAll('img').forEach(img => {
@@ -352,6 +368,8 @@ void loop() {
 
                     // Mostra popup
                     popupCode.textContent = explanations[index];
+                    title.textContent = img.src.split('/').pop().split('.')[0].replace(/_/g, ' ').toUpperCase();
+                    desc.textContent = descrizioni[index];
                     hljs.highlightElement(popupCode);
 
                     // Posizione popup
@@ -365,7 +383,9 @@ void loop() {
                     // Posizione popup (top o bottom)
                     if (isBottomRow) {
                         popup.style.top = `${Math.min(rect.bottom - popupHeight, window.innerHeight - popupHeight - 20)}px`;
+                        document.getElementById('code').style.display = 'none';
                     } else {
+                        document.getElementById('code').style.display = '';
                         popup.style.top = `${rect.top}px`;
                     }
 

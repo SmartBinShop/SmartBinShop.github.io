@@ -121,3 +121,8 @@ pre {
     font-size: 14px;
     overflow-x: auto;
 }
+
+.popup p {
+    padding: 20px 0px 20px 0px;
+    max-width: 390px;
+}
