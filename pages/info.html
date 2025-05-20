@@ -62,7 +62,7 @@
             <img src="/img/buzzer.png" data-index="5">
             <img src="/img/jumper.PNG" data-index="6">
             <img src="/img/breadboard.png" data-index="7">
-            <img src="/img/resistenza.png" data-index="8">
+            <img src="/img/resistore.png" data-index="8">
         </div>
         <div class="overlay" id="overlay"></div>
 
@@ -92,13 +92,13 @@
 
                 'Il LED RGB è un diodo luminoso composto da un LED rosso, un LED verde e un LED blu, di cui si possono modificare le intensità per la creazione di una vasta gamma di colori. Anch\'esso utilizza i segnali PWM inviati dal microcontrollore e può essere a catodo comune, ovvero la condivisione del polo negativo dei 3 LED, o ad anodo comune, la condivisione del polo positivo dei 3 LED.\n\n// In questo progetto serve per l\'emissione di luci diverse a seconda dello stato del cestino: aperto o chiuso.',
 
-                'Il buzzer è un dispositivo acustico che produce suoni. Può essere utilizzato per segnalazioni sonore, avvisi e allarmi in vari progetti elettronici.',
+                'Il buzzer passivo, o piezo, è un dispositivo acustico per la generazione di suoni, controllato tramite un segnale a frequenza variabile (PWM). Per funzionare, il buzzer di tipo piezoelettrico sfrutta un disco di materiale cristallino che si espande e contrae rapidamente quando attraversato da corrente alternata, producendo onde sonore.\n\n// In questo progetto serve per l\'emissione di suoni diversi a seconda dello stato del cestino: aperto o chiuso.',
 
-                'I cavi jumper sono fili elettrici utilizzati per collegare componenti elettronici su una breadboard o tra circuiti. Sono disponibili in diverse lunghezze e colori.',
+                'I cavi jumper sono fili conduttori usati per collegamenti elettrici tra componenti senza saldature. Alle estremità dei cavi troviamo dei connettori metallici che si inseriscono facilmente nei fori di una breadboard o nei pin di una scheda. Esistono tre tipi di cavi jumper:\n- MM (Maschio-Maschio), con connettori da entrambe le estremità.\n- MF (Maschio-Femmina), con connettore da una sola estremità.\n- FF (Femmina-Femmina), senza connettori alle estremità.\n\n// In questo progetto servono a collegare i componenti fra loro.',
 
-                'La breadboard è una piastra di prototipazione senza saldatura che consente di assemblare circuiti elettronici in modo semplice e veloce. È dotata di fori per inserire i componenti e collegarli tra loro.',
+                'La breadboard è una base di plastica con una griglia di fori collegati tramite delle strisce metalliche sottostanti, che permette di realizzare circuiti elettronici senza saldature. Al centro ci sono due griglie separate dove si inseriscono i pin dei componenti, mentre ai lati si trovano delle linee di alimentazione marcate da simboli + e -.\n\n// In questo progetto serve per il collegamento di componenti e cavi jumper.',
 
-                'La resistenza è un componente elettronico che limita il flusso di corrente in un circuito. Viene utilizzata per proteggere i componenti e regolare le tensioni nei circuiti elettronici.'
+                'Il resistore è un componente elettronico che serve a limitare il flusso di corrente elettrica in un circuito. È costituito da un materiale che offre una determinata resistenza elettrica, misurata in ohm (Ω), la quale determina quanto ostacola il passaggio degli elettroni. Il resistore protegge i componenti più delicati come LED e microchip e si presenta come un piccolo cilindro o rettangolo su cui sono presenti delle bande colorate che indicano il valore resistivo tramite un codice standard.\n\n// In questo progetto serve a proteggere diversi componenti.'
 
             ]
             const explanations = [
@@ -281,7 +281,7 @@ void loop() {
     duration = pulseIn(echoPin, 1);
     distance = duration / 58.31;
 
-    if(distance < minDistance) {
+    if(distance > 0 && distance < minDistance) {
         digitalWrite(ledPin, 1);
     } else {
         digitalWrite(ledPin, 0);
@@ -348,6 +348,7 @@ void loop() {
             const desc = document.getElementById('desc');
             const popupCode = document.getElementById('popupCode');
             const body = document.body;
+            const codeBtn = document.getElementById('toggleCodeBtn');
             grid.querySelectorAll('img').forEach(img => {
                 img.addEventListener('click', () => {
 
@@ -397,9 +398,11 @@ void loop() {
                     if (isBottomRow) {
                         popup.style.top = `${Math.min(rect.bottom - popupHeight, window.innerHeight - popupHeight - 20)}px`;
                         document.getElementById('code').style.display = 'none';
+                        codeBtn.style.display = 'none';
                     } else {
                         document.getElementById('code').style.display = '';
                         popup.style.top = `${rect.top}px`;
+                        codeBtn.style.display = '';
                     }
 
                     popup.style.left = popupSide === 'right'
