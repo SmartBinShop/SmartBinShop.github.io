@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prodotti | SmartBin</title>
+    <link rel="shortcut icon" href="/img/cestino.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" />
+    <link rel="stylesheet" href="/css/var.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/prod.css">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-bar">
+
+            <a href="/index.html" class="logo navLogo">
+                <img src="/img/cestino.png">
+                <span>Smart</span><span>Bin</span>
+            </a>
+
+            <div class="menu">
+                <div class="logo-toggle">
+                    <span class="logo"><a href="/index">SmartBin</a></span>
+                    <i class="bx bx-x sidebarClose"></i>
+                </div>
+
+                <ul class="nav-links">
+                    <li><a href="/index.html">Home</a></li>
+                    <li><a href="/pages/products.html" class="active">Prodotti</a></li>
+                    <li><a href="/pages/info.html">Info</a></li>
+                    <li><a href="/pages/contact.html">Contatti</a></li>
+                </ul>
+            </div>
+
+            <div class="darkLight-searchBox">
+                <i class="bx bx-menu sidebarOpen"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="containeru">
+            <div class="progetto">
+                <a href="/pages/products.html">Torna Indietro</a>
+            </div>
+            <div class="acquista">
+
+                <div class="main-image">
+                    <img id="mainImg" src="/img/1-cestino.png" alt="Prodotto principale">
+                </div>
+
+                <div class="product-info">
+                    <div class="info-box">
+                        <h1>SmartBin v1.0</h1>
+                        <div class="price-info">
+                            <span class="price-old">59.99€</span>
+                            <span>39.99€</span>
+                        </div>
+
+                        <button>Acquista Ora</button>
+                    </div>
+
+                    <div class="btn-containeru">
+                        <button onclick="changeImage('/img/1-cestino.png', 1)">
+                            <img src="/img/1-cestino.png" alt="white">
+                        </button>
+                        <button onclick="changeImage('/img/2-cestino.png', 2)">
+                            <img src="/img/2-cestino.png" alt="black">
+                        </button>
+                        <button onclick="changeImage('/img/3-cestino.png', 3)">
+                            <img src="/img/3-cestino.png" alt="green">
+                        </button>
+                        <button onclick="changeImage('/img/4-cestino.png', 4)">
+                            <img src="/img/4-cestino.png" alt="yellow">
+                        </button>
+                        <button onclick="changeImage('/img/5-cestino.png', 5)">
+                            <img src="/img/5-cestino.png" alt="brown">
+                        </button>
+                    </div>
+                </div>
+
+                <script>
+                    function changeImage(src, prod) {
+                        document.getElementById('mainImg').src = src;
+
+                        switch (prod) {
+                            case 1:
+                                productColor = 'Bianco';
+                                break;
+                            case 2:
+                                productColor = 'Nero';
+                                break;
+                            case 3:
+                                productColor = 'Verde';
+                                break;
+                            case 4:
+                                productColor = 'Giallo';
+                                break;
+                            case 5:
+                                productColor = 'Marrone';
+                                break;
+                        }
+                        localStorage.setItem('productColor', productColor);
+                    }
+
+                    document.querySelector('.info-box button').addEventListener('click', () => {
+                        const imgSrc = document.getElementById('mainImg').src;
+                        const productName = document.querySelector('.info-box h1').innerText;
+                        const price = document.querySelector('.price-info span:last-child').innerText;
+                        let productColor = '';
+
+
+
+                        localStorage.setItem('productImg', imgSrc);
+                        localStorage.setItem('productName', productName);
+                        localStorage.setItem('productPrice', price);
+
+
+                        window.location.href = '/pages/checkout.html';
+                    });
+                </script>
+
+            </div>
+    </main>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://instagram.com/smartbin_shop" aria-label="Instagram" target="_blank"><i
+                    class='bx bxl-instagram'></i> @smartbin_shop</a>
+            <a href="https://youtube.com/@SmartBin-Shop" aria-label="YouTube" target="_blank"><i
+                    class='bx bxl-youtube'></i> @SmartBin-Shop</a>
+            <a href="https://x.com/SmartBin_Shop" aria-label="Twitter/X" target="_blank"><i class='bx bxl-twitter'></i>
+                @SmartBin_Shop</a>
+            <a href="mailto:smartbin.help@gmail.com" aria-label="Gmail" target="_blank"><i class='bx bx-envelope'></i>
+                smartbin.help@gmail.com</a>
+        </div>
+
+        <p>
+            Copyright &copy; 2025
+            <span class="brand-white">Smart</span><span class="brand-yellow"">Bin</span>
+            - All rights reserved.
+        </p>
+    </footer>
+
+</body>
+
+</html>

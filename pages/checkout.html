@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | SmartBin</title>
+    <link rel="stylesheet" href="/css/var.css">
+    <style>
+        main {
+            display: grid;
+            min-height: 100vh;
+            place-content: center;
+            padding: 2rem;
+        }
+
+        .product-details {
+            color: white;
+            font-size: 1.4rem;
+        }
+
+        .containeru {
+            background: #272727;
+            padding: 1rem 3rem 1rem 3rem;
+            border-radius: 2rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .containeru h1 {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .preview {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: #1c1c1c;
+            padding: 1rem;
+            border-radius: 1.5rem;
+        }
+
+        .preview img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 1rem;
+        }
+
+        .form-section label {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+            color: #ccc;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.4rem;
+            border: 1px solid #444;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            background: #1c1c1c;
+            color: white;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        .inline-fields {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .inline-fields>div {
+            flex: 1;
+        }
+
+        .terms {
+            margin-top: 1.5rem;
+        }
+
+        .terms label {
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            color: #ddd;
+        }
+
+        button {
+            margin-top: 2rem;
+            width: 100%;
+            padding: 1rem;
+            background: #ffffff;
+            color: black;
+            border: none;
+            border-radius: 1rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #e0e0e0;
+            transform: scale(1.02);
+        }
+
+        #successPopup,
+        #errorPopup {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: grid;
+            place-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: #1c1c1c;
+            color: white;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .popup-content button {
+            margin-top: 1rem;
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .popup-content button:hover {
+            background: #e0e0e0;
+        }
+
+        .popup-content h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .popup-content p {
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="containeru">
+            <h1>Checkout</h1>
+
+            <div class="preview">
+                <img id="productImg" src="" alt="Prodotto">
+                <div class="product-details">
+                    <h2 id="productName">Prodotto</h2>
+                    <p id="productPrice">Prezzo</p>
+                    <p>Colore: <span id="productColor"></span></p>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <label for="fullname">Nome completo *:</label>
+                <input type="text" id="fullname" placeholder="Nome Cognome">
+
+                <label for="email">Email (Facoltativo):</label>
+                <input type="email" id="email" placeholder="mario.rossi@gmail.com">
+
+                <label for="quantity">Quantità:</label>
+                <input type="number" id="quantity" value="1" min="1">
+
+                <div class="inline-fields">
+                    <div>
+                        <label for="card">Numero carta di credito *:</label>
+                        <input type="text" id="card" placeholder="1234 5678 9012 3456" maxlength="19">
+                    </div>
+                    <div>
+                        <label for="expiry">Scadenza *:</label>
+                        <input type="text" id="expiry" placeholder="MM/AA" maxlength="5">
+                    </div>
+                </div>
+
+                <label for="cvc">CVC *:</label>
+                <input type="text" id="cvc" placeholder="123" maxlength="3">
+
+                <div class="terms">
+                    <label>
+                        <input type="checkbox" id="terms">
+                        *Dichiaro di aver letto e accettato i termini e le condizioni di acquisto.
+                    </label>
+                </div>
+
+                <button onclick="checkout()">Procedi al Pagamento</button>
+                <center>
+                    <p style="padding: 1rem;">* Campi con compilazione obbligatoria</p>
+                </center>
+            </div>
+        </div>
+    </main>
+    <div id="errorPopup" style="display: none;">
+        <div class="popup-content">
+            <h2>Errore</h2>
+            <p id="errorMessage"></p>
+            <button onclick="closeError()">Chiudi</button>
+        </div>
+    </div>
+
+    <div id="successPopup" style="display: none;">
+        <div class="popup-content">
+            <h2>Ordine completato!</h2>
+            <p id="popupMessage"></p>
+            <button onclick="closePopup()">OK</button>
+        </div>
+    </div>
+
+
+    <script>
+        document.getElementById('productImg').src = localStorage.getItem('productImg');
+        document.getElementById('productName').innerText = localStorage.getItem('productName');
+        document.getElementById('productPrice').innerText = localStorage.getItem('productPrice');
+        document.getElementById('productColor').innerText = localStorage.getItem('productColor');
+
+        const cardInput = document.getElementById('card');
+        const expiryInput = document.getElementById('expiry');
+        const cvcInput = document.getElementById('cvc');
+
+        cardInput.addEventListener('input', () => {
+            let value = cardInput.value.replace(/\D/g, '').substring(0, 16);
+            let formatted = value.match(/.{1,4}/g);
+            cardInput.value = formatted ? formatted.join(' ') : '';
+        });
+
+        cvcInput.addEventListener('input', () => {
+            cvcInput.value = cvcInput.value.replace(/\D/g, '').substring(0, 4);
+        });
+
+        expiryInput.addEventListener('input', () => {
+            let value = expiryInput.value.replace(/\D/g, '').substring(0, 4);
+            if (value.length >= 3) {
+                expiryInput.value = value.substring(0, 2) + '/' + value.substring(2);
+            } else {
+                expiryInput.value = value;
+            }
+        });
+
+        function checkout() {
+            const name = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const quantity = document.getElementById('quantity').value;
+            const card = cardInput.value.replace(/\s+/g, '');
+            const expiry = expiryInput.value;
+            const cvc = cvcInput.value;
+            const accepted = document.getElementById('terms').checked;
+
+            if (!name || !card || !expiry || !cvc) {
+                showError('Per favore, compila tutti i campi obbligatori.');
+                return;
+            }
+
+            if (!accepted) {
+                showError('Devi accettare i termini e le condizioni per continuare.');
+                return;
+            }
+
+            if (card.length < 12 || cvc.length < 3 || !isExpiryValid(expiry)) {
+                showError('Inserisci dati di carta validi.');
+                return;
+            }
+
+            const productName = localStorage.getItem('productName');
+            const message = `Hai acquistato ${quantity}x ${productName}. Grazie ${name}${email ? ', ti invieremo aggiornamenti a ' + email : ''}.`;
+
+            document.getElementById('popupMessage').innerText = message;
+            document.getElementById('successPopup').style.display = 'grid';
+        }
+
+        function isExpiryValid(expiry) {
+            if (!/^\d{2}\/\d{2}$/.test(expiry)) return false;
+
+            const [monthStr, yearStr] = expiry.split('/');
+            const month = parseInt(monthStr, 10);
+            let year = parseInt(yearStr, 10);
+
+            if (month < 1 || month > 12) return false;
+
+            // Otteniamo anno completo a 4 cifre (esempio: 25 diventa 2025)
+            const currentYearFull = new Date().getFullYear();  // es. 2025
+            const currentYearShort = currentYearFull % 100;    // es. 25
+            const currentMonth = new Date().getMonth() + 1;    // da 0-11 a 1-12
+
+            year += 2000; // assumiamo anni dal 2000 in poi
+
+            // Controllo se la carta è già scaduta
+            if (year < currentYearFull) return false;
+            if (year === currentYearFull && month < currentMonth) return false;
+
+            return true;
+        }
+
+        function closePopup() {
+            document.getElementById('successPopup').style.display = 'none';
+            window.location.href = '/pages/singolo.html';
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').innerText = message;
+            document.getElementById('errorPopup').style.display = 'grid';
+        }
+
+        function closeError() {
+            document.getElementById('errorPopup').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

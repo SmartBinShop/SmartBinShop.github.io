@@ -1,0 +1,30 @@
+.container h1 {
+    font-size: 4rem;
+    color: #ffffff;
+    text-align: center;
+    padding: 2rem;
+}
+
+.progetto {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+}
+
+.progetto a {
+    position: relative;
+    color: #ffffff;
+    font-size: 1.5rem;
+    margin-top: 10px;
+    top: 780px;
+    right: 650px;
+    background-color: #272727;
+    padding: 15px;
+    border-radius: 1rem;
+}
+
+.progetto a:hover {
+    transform: scale(1.1);
+}
