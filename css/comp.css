@@ -1,23 +1,34 @@
 .container {
+    padding: 6rem 5rem 0 5rem;
     display: flex;
     flex-direction: column;
-    position: relative;
     place-items: start;
-    top: 135px;
-    right: 700px;
+
 }
 
 .container h1 {
     font-size: 4rem;
     color: #ffffff;
-    text-align: center;
+    padding: 1rem;
+}
+
+.container h2 {
+    padding: 1rem;
+    font-size: 2rem;
+    color: #ffffff;
+}
+
+.container p {
+    padding: 1rem;
+    font-size: 1rem;
+    color: #ffffff;
 }
 
 .grid {
     display: grid;
     grid-template-columns: repeat(3, 250px);
     gap: 30px;
-    padding: 80px;
+    padding: 0 80px 80px 80px;
     justify-content: center;
 }
 
@@ -143,7 +154,7 @@ pre {
     color: #ffffff;
     font-size: 1.5rem;
     margin-top: 10px;
-    top: 900px;
+    top: 1425px;
     left: 600px;
     background-color: #272727;
     padding: 15px;
